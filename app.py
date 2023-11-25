@@ -30,7 +30,7 @@ def display_chat():
             f"""
             <div style="display: flex; align-items: center; margin-bottom: 5px;">
                 <div style="background-color: {background_color}; color: {text_color}; border-radius: 15px; padding: 10px; margin-left: 10px; margin-right: 10px; flex-grow: 1;">
-                    {emoji}{message}
+                    {emoji} {message}
                 </div>
             </div>
             """,
