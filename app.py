@@ -16,33 +16,26 @@ def add_message(role, message):
 
 
 def display_chat():
-    st.write("Chat history:")
-    st.write('<div style="display: flex; flex-direction: column-reverse;">', unsafe_allow_html=True)
-    for emoji, role, message in st.session_state["chat_history"]:
+    for emoji, role, message in reversed(st.session_state["chat_history"]):
         if role == "user":
-            st.markdown(
-                f"""
-                <div style="margin: 5px 0; display: flex; align-items: center;">
-                    <div style="margin-right: 10px;">{emoji}</div>
-                    <div style="line-height: 1.5; padding: 10px; background-color: #e5eff5; border-radius: 15px; max-width: 60%; margin-right: auto;">
-                        {message}
-                    </div>
+            # Light background color for user messages
+            background_color = "#ffffff"  # White
+            text_color = "#000000"  # Black text color for light background
+        else:
+            # Dark background color for AI messages
+            background_color = "#555555"  # Dark gray
+            text_color = "#ffffff"  # White text color for dark background
+
+        st.markdown(
+            f"""
+            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                <div style="background-color: {background_color}; color: {text_color}; border-radius: 15px; padding: 10px; margin-left: 10px; margin-right: 10px; flex-grow: 1;">
+                    {emoji}{message}
                 </div>
-                """,
-                unsafe_allow_html=True
-            )
-        else:  # AI's messages
-            st.markdown(
-                f"""
-                <div style="margin: 5px 0; display: flex; align-items: center; flex-direction: row-reverse;">
-                    <div style="margin-left: 10px;">{emoji}</div>
-                    <div style="line-height: 1.5; padding: 10px; background-color: #f0f0f0; border-radius: 15px; max-width: 60%; margin-left: auto;">
-                        {message}
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     st.write('</div>', unsafe_allow_html=True)
 
 
