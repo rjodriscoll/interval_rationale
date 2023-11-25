@@ -2,15 +2,17 @@ from openai import OpenAI
 from intrat.ai_prompts.system_prompt import system_prompt
 
 class WorkoutAI:
-    def __init__(self, model: str = "gpt-3.5-turbo", api_key: str = None):
+    def __init__(self, model: str = "gpt-3.5-turbo", temperature = 0.3, api_key: str = None):
         self.client = OpenAI(api_key=api_key)
         self.model = model
+        self.temperature = temperature
         self.messages = [{"role": "system", "content": system_prompt}]
 
     def generate_response(self):
         response = self.client.chat.completions.create(
             model=self.model,
             messages=self.messages,
+            temperature=self.temperature
         )
         return response.choices[0].message.content
 
