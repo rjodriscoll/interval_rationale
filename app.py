@@ -16,7 +16,7 @@ def add_message(role, message):
 
 
 def display_chat():
-    for emoji, role, message in reversed(st.session_state["chat_history"]):
+    for emoji, role, message in st.session_state["chat_history"]:
         if role == "user":
             # Light background color for user messages
             background_color = "#ffffff"  # White
@@ -59,12 +59,15 @@ def main():
         "including scientific justification for the intervals it finds within the workout."
     )
     if "is_initialised" not in st.session_state:
-            st.session_state["is_initialised"] = False
+        st.session_state["is_initialised"] = False
     with st.sidebar:
         api_key = st.text_input(
             "Enter your OpenAI API Key and then press enter.", type="password"
         )
-        model = st.selectbox("Select a model. Gpt-4 is smarter but more expensive.", ["gpt-4", "gpt-3.5-turbo"])
+        model = st.selectbox(
+            "Select a model. Gpt-4 is smarter but more expensive.",
+            ["gpt-4", "gpt-3.5-turbo"],
+        )
         temperature = st.slider(
             "Select a model temperature. Temperature controls the creativity of the AI, with higher values being more creative.",
             min_value=0.0,
@@ -73,8 +76,10 @@ def main():
             step=0.1,
         )
 
-    if api_key and  st.session_state["is_initialised"] == False:
-        st.session_state["workout_ai"] = WorkoutAI(model=model, api_key=api_key, temperature=temperature)
+    if api_key and st.session_state["is_initialised"] == False:
+        st.session_state["workout_ai"] = WorkoutAI(
+            model=model, api_key=api_key, temperature=temperature
+        )
         uploaded_file = st.file_uploader("Upload a .zwo file", type="zwo")
 
         if uploaded_file and not st.session_state["is_initialised"]:
@@ -82,12 +87,16 @@ def main():
                 workout_segments = parse_uploaded_file(uploaded_file)
                 if workout_segments:
                     workout_data = str(workout_segments)
-                    ai_response = st.session_state["workout_ai"].get_response(workout_data)
+                    print(workout_data)
+                    ai_response = st.session_state["workout_ai"].get_response(
+                        workout_data
+                    )
                     add_message("ai", ai_response)
                     st.session_state["is_initialised"] = True
                     with st.container():
                         display_chat()
 
+    
     if st.session_state.get("is_initialised", False):
         user_input = st.text_input("Ask the AI a question", key="user_input")
 
@@ -95,10 +104,12 @@ def main():
             if user_input:
                 with st.spinner("Asking the AI..."):
                     add_message("user", user_input)
-                    ai_response = st.session_state["workout_ai"].get_response(user_input)
+                    ai_response = st.session_state["workout_ai"].get_response(
+                        user_input
+                    )
                     add_message("ai", ai_response)
-                with st.container():
-                    display_chat()
+                    with st.container():
+                        display_chat()
 
 
 if __name__ == "__main__":
