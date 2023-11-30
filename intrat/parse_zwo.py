@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import json
 
 
-def float_perc(value: str | float) -> float:
+def float_perc(value: str) -> float:
     """Converts a string to a float as %."""
     return round(float(value) * 100)
 
